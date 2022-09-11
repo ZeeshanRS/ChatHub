@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewBag.Title = "New User";
+}
+
+@section Scripts{
+
+    <script type="text/javascript">
+        $(function () {
+            $("#btn-add").click(function () {
+                var userName = $("#txtUserName").val();
+                var userEmail = $("#txtUserEmail").val();
+                var userNote = $("#txtUserNote").val();
+                var userPassword = $("#txtUserPassword").val();
+                if ((!userName || !userEmail) && ($('#btn-add').text() == "Join")) {
+                    alert('Please enter user name and email！'); return false;
+                }
+                if ((!userPassword || !userEmail) && ($('#btn-add').text() == "Login")) {
+                    alert('Please enter email and password！'); return false;
+                }
+                $('#hfMode').val($('#btn-add').text())
+            });
+        });
+        function toggleLogin() {
+            if ($('#btn-add').text() == "Join") {//switch to login mode
+                $('#txtUserName, #txtUserNote').css('display', 'none');
+                $('#btn-add').text('Login');
+            } else { //switch to join mode
+                $('#txtUserName, #txtUserNote').css('display', '');
+                $('#btn-add').text('Join');
+            }
+            $('#spn-Login, #spn-Join').toggle();
+        }
+    </script>
+}
+
+<h2>
+    New User
+    <span id="spn-Login" class="pull-right" style="font-size:small;">Registerd User? <button class="btn btn-sm btn-primary" onclick="toggleLogin();">Login</button></span>
+    <span id="spn-Join" class="pull-right" style="font-size: small; display: none">Not Registerd User? <button class="btn btn-sm btn-primary" onclick="toggleLogin();">Join</button></span>
+</h2>
+<form method="post" action="" autocomplete="off">
+    <input type="text" class="form-control" placeholder="Name" id="txtUserName" name="userName" />
+    <br />
+    <input type="email" class="form-control" placeholder="Email" id="txtUserEmail" name="userEmail" />
+    <br />
+    <input type="password" class="form-control" placeholder="Password" id="txtUserPassword" name="userPassword" />
+    <br />
+    <input type="text" class="form-control" placeholder="Note" id="txtUserNote" name="userNote" />
+    <br />
+    <input type="hidden" id="hfMode" name="hfMode" value="Join" />
+    @if (ViewBag.Msg != null)
+    {
+        ViewBag.Msg = null;
+        <div class="alert alert-danger">
+            <strong>Login failed!</strong> Invalid credentials.
+        </div>
+        <script>
+            setTimeout(function () {
+                toggleLogin();
+            }, 100);
+        </script>
+    }
+    <button id="btn-add" class="btn btn-sm btn-primary" type="submit">Join</button>
+</form>
